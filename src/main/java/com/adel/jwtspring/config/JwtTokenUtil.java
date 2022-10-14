@@ -46,15 +46,10 @@ public class JwtTokenUtil implements Serializable {
      * extract information from token
      */
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-    }
-
-    /**
-     * check token has expired
-     */
-    private Boolean isTokenExpired(String token){
-        final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
+        return Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     /**
@@ -81,6 +76,14 @@ public class JwtTokenUtil implements Serializable {
         final String username = getUsernameFromToken(token);
         return username.equals(userDetails.getUsername())
                 && !isTokenExpired(token);
+    }
+
+    /**
+     * check token has expired
+     */
+    private Boolean isTokenExpired(String token){
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
     }
 
 }
